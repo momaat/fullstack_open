@@ -23,6 +23,7 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(new Uint8Array(8))
 
   const changeAnecdote = () => {
     return(
@@ -30,9 +31,20 @@ const App = () => {
     )
   }
 
+  const addVotes = (props) => {
+    const copyPoints = [...points]
+    copyPoints[selected] +=1
+    
+    return (
+      setPoints(copyPoints)
+    )
+  }
+
   return (
     <div>
       {anecdotes[selected]}
+      <p>has {points[selected]} votes</p>
+      <Button handleClick={addVotes} text="vote"/>
       <Button handleClick={changeAnecdote} text="Next anecdote"/>
     </div>
   )
