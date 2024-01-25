@@ -21,9 +21,10 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
+
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(new Uint8Array(8))
+  const [mostVotes, setMostVotes] = useState(0);
 
   const changeAnecdote = () => {
     return(
@@ -31,21 +32,42 @@ const App = () => {
     )
   }
 
-  const addVotes = (props) => {
+  const indexOfMax = (arr) => {
+    return arr.reduce((maxIndex, elem, i, arr) =>
+        elem > arr[maxIndex] ? i : maxIndex, 0);
+  }
+
+
+  const addVotes = () => {
     const copyPoints = [...points]
     copyPoints[selected] +=1
+    setPoints(copyPoints)
+
     
-    return (
-      setPoints(copyPoints)
-    )
+    let maxIndex = 0
+    let max = copyPoints[0]
+
+    for (let i = 0; i < copyPoints.length; i++) {
+      if(copyPoints[i] > max) {
+        maxIndex = i;
+        max = copyPoints[i]
+      }
+    }
+    setMostVotes(maxIndex)
+    
   }
+
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]}
       <p>has {points[selected]} votes</p>
       <Button handleClick={addVotes} text="vote"/>
       <Button handleClick={changeAnecdote} text="Next anecdote"/>
+      <h2>Anecdote with most votes</h2>
+      {anecdotes[mostVotes]}
+      <p>has {points[mostVotes]} votes</p>
     </div>
   )
 }
