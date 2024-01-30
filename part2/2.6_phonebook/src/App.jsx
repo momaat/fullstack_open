@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -7,20 +7,14 @@ import { useEffect } from 'react'
 
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    // { name: 'Arto Hellas', number: '0401234567'},
-    // { name: 'Ada Lovelace', number: '040322245435'},
-    // { name: 'Dan Abramov', number: '0309298484'},
-    // { name: 'Mary Poppendieck', number: '94939949349'},
-  ]) 
-
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then (response => {
         setPersons(response.data)
       })
@@ -40,8 +34,8 @@ const App = () => {
     } else {
         const personObject = { name: newName, number: newNumber };
         
-        axios
-        .post('http://localhost:3001/persons', personObject)
+        personService
+        .create(personObject)
         .then(response => {
           console.log(response)
           setPersons(persons.concat(personObject));
