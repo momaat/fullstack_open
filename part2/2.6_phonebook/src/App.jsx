@@ -28,23 +28,39 @@ const App = () => {
     // Check if name already exists in the list
     const nameExists = persons.some(person => person.name === newName);
 
-    // Add name only if it doesn't already exist, otherwise make an alert
+    // If name exists, update number
     if (nameExists) {
-        alert(`${newName} is already added to phonebook`) 
+      const updatePerson = persons.find(person => person.name === newName)
+      const updateId = updatePerson.id;
+      const person = persons.find(person => person.id === updateId)
+      const changedPerson = {...person, number: newNumber}
+
+      console.log(updateId + 'updateID')
+      confirm(`${newName} is already added to phonebook,replace the old number with a new one?`) 
+        ? personService
+          .update(updateId, changedPerson)
+          .then(response => {
+            setPersons(persons.map(person => person.id !== updateId ? person : response.data))
+          })
+          
+        : ""
+
+    // else create a new person
     } else {
-        const personObject = { name: newName, number: newNumber };
-        
-        personService
+      const personObject = { name: newName, number: newNumber };
+      
+      personService
         .create(personObject)
         .then(response => {
-          console.log(response)
-          setPersons(persons.concat(personObject));
-          setNewName('')
-          setNewNumber('')
-        })
+        setPersons(persons.concat(response.data));
+      })
     }
+
+    setNewName('')
+    setNewNumber('')
   }
 
+  // Remove person from the persons list
   const handleDeletePerson = (id) => {
     personService
       .deletePerson(id)
