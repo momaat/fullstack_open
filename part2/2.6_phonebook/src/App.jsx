@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [notification, setNotification] = useState(null)
+  const [notificationType, setNotificationType] = useState('notification')
 
   useEffect(() => {
     personService
@@ -45,12 +46,20 @@ const App = () => {
             
             // show notification
             setNotification(`${changedPerson.name}'s number changed`)
+            setNotificationType('notification')
 
             setTimeout(() => {
               setNotification(null)
             }, 3000)
           })
-          
+          .catch(error => {
+            setNotification(`Information of ${changedPerson.name} has already been removed from server`)
+            setNotificationType('error')
+
+            setTimeout(() => {
+              setNotification(null)
+            }, 3000)
+          })
         : ""
 
     // else create a new person
@@ -64,6 +73,7 @@ const App = () => {
 
         // show notification
         setNotification(`Added ${newName} to phonebook`)
+        setNotificationType('notification')
 
         setTimeout(() => {
           setNotification(null)
@@ -111,7 +121,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={notification}/>
+      <Notification message={notification} messageType={notificationType}/>
 
       <Filter value={filter} onChange={handleFilterChange}/>
      

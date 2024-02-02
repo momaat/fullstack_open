@@ -1,11 +1,12 @@
-const Notification = ({ message }) => {
-    if (message === null) {
+const Notification = (props) => {
+
+    if (props.message === null) {
       return null
     }
   
     return (
-      <div className="error">
-        {message}
+      <div className={props.messageType}>
+        {props.message}
       </div>
     )
 }
