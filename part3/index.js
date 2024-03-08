@@ -4,18 +4,18 @@ const app = express()
 let persons = [
     {
         id: 1,
-        content: "HTML is easy",
-        important: true
+        name: "Ada Lovelace",
+        number: "040 123 4567"
       },
       {
         id: 2,
-        content: "Browser can execute only JavaScript",
-        important: false
+        name: "Dan Abramov",
+        number: "030 3434 4433"
       },
       {
         id: 3,
-        content: "GET and POST are the most important methods of HTTP protocol",
-        important: true
+        name: "Mary Poppendick",
+        number: "0340 33 5544"
       }
 ]
 
