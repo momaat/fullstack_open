@@ -56,7 +56,7 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
-// 3.5 Add person
+// 3.5 Generate unique ID
 const generateId = () => {
   // const maxId = persons.length > 0
   //   ? Math.max(...persons.map(p => p.id))
@@ -67,8 +67,24 @@ const generateId = () => {
   return id
 }
 
+// 3.6 Check if name exists
+const nameExists= (name) => {
+  for (let person of persons) {
+    if(person.name.toLowerCase() === name.toLowerCase()) {
+      return true;
+    }
+  }
+}
+
+// 3.5 Add name
 app.post('/api/persons', (request, response) => {
   const body = request.body
+
+  if(nameExists(body.name)) {
+    return response.status(400).json({
+      error: 'name must be unique'
+    })
+  }
   
   if(!body.name) {
     return response.status(400).json({
