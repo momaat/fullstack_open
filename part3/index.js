@@ -24,7 +24,14 @@ app.get('/', (request, response) => {
   })
   
 app.get('/api/persons', (request, response) => {
-response.json(persons)
+  response.json(persons)
+})
+
+app.get('/info', (request, response) => {
+  const personsAmount = persons.length;
+  const date = new Date();
+  
+  response.send(`<p>Phonebook has info for ${personsAmount} people</p><p>${date}</p>`)
 })
 
 const PORT = 3001
