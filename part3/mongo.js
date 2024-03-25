@@ -26,7 +26,7 @@ const person = new Person({
 })
 
 if (process.argv.length === 3) {
-    //If only password is provided, print all names and numbers
+    // If only password is provided, print all names and numbers
     Person.find({}).then(result => {
         console.log('phonebook:');
         result.forEach(person => {
@@ -35,6 +35,7 @@ if (process.argv.length === 3) {
         mongoose.connection.close()
       })
 } else if (process.argv.length === 5) {
+    // If name and number is provided, add them to database
     person.save().then(result => {
         console.log(`added ${person.name} ${person.number} to phonebook`)
         mongoose.connection.close()
