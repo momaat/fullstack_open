@@ -50,10 +50,13 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-  const personsAmount = persons.length;
-  const date = new Date();
-  
-  response.send(`<p>Phonebook has info for ${personsAmount} people</p><p>${date}</p>`)
+  // const personsAmount = persons.length;
+  // 3.18
+  Person.countDocuments({})
+    .then(count => {
+      const date = new Date();
+      response.send(`<p>Phonebook has info for ${count} people</p><p>${date}</p>`)
+    })
 })
 
 // 3.3 Get person with id
@@ -156,6 +159,7 @@ app.post('/api/persons', (request, response) => {
     })
 })
 
+// 3.17
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
 
