@@ -57,14 +57,20 @@ app.get('/info', (request, response) => {
 
 // 3.3 Get person with id
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(person => person.id === id)
+  // const id = Number(request.params.id)
+  // const person = persons.find(person => person.id === id)
 
-  if(person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+  // if(person) {
+  //   response.json(person)
+  // } else {
+  //   response.status(404).end()
+  // }
+
+  // 3.14
+  Person.findById(request.params.id)
+    .then(person => {
+      response.json(person)
+    })
 })
 
 // 3.4 Delete person
@@ -117,16 +123,26 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const person = {
-      id: generateId(),
-      name: body.name,
-      number: body.number
-  }
+  // const person = {
+  //     id: generateId(),
+  //     name: body.name,
+  //     number: body.number
+  // }
 
-  persons = persons.concat(person)
+  // persons = persons.concat(person)
 
-  response.json(person)
+  // response.json(person)
 
+  // 3.14
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
+
+  person.save()
+    .then(savedPerson => {
+      response.json(savedPerson)
+    })
 })
 
 const PORT = process.env.PORT
