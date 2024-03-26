@@ -20,6 +20,7 @@ morgan.token('postData', (req, res) => {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postData'))
 
+
 let persons = [
     {
         id: 1,
@@ -56,7 +57,7 @@ app.get('/info', (request, response) => {
 })
 
 // 3.3 Get person with id
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   // const id = Number(request.params.id)
   // const person = persons.find(person => person.id === id)
 
@@ -70,10 +71,10 @@ app.get('/api/persons/:id', (request, response) => {
           response.status(404).end()
         }
     })
-    .catch(error => {
-      console.log(error)
-      response.status(400).send({error: 'malformatted id'})
-    } )
+    .catch(error => next(error)
+      // console.log(error)
+      // response.status(400).send({error: 'malformatted id'})
+     )
 })
 
 // 3.4 Delete person
@@ -154,6 +155,19 @@ app.post('/api/persons', (request, response) => {
       response.json(savedPerson)
     })
 })
+
+// 3.16
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message)
+
+  if(error.name === 'CastError') {
+    return response.status(400).send({error: 'malformatted id'})
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT)
