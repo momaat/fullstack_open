@@ -60,25 +60,35 @@ app.get('/api/persons/:id', (request, response) => {
   // const id = Number(request.params.id)
   // const person = persons.find(person => person.id === id)
 
-  // if(person) {
-  //   response.json(person)
-  // } else {
-  //   response.status(404).end()
-  // }
-
   // 3.14
   Person.findById(request.params.id)
     .then(person => {
-      response.json(person)
+      // 3.15
+      if (person) {
+          response.json(person)
+        } else {
+          response.status(404).end()
+        }
     })
+    .catch(error => {
+      console.log(error)
+      response.status(400).send({error: 'malformatted id'})
+    } )
 })
 
 // 3.4 Delete person
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
+app.delete('/api/persons/:id', (request, response, next) => {
+  // const id = Number(request.params.id)
+  // persons = persons.filter(person => person.id !== id)
 
-  response.status(204).end()
+  // response.status(204).end()
+
+  // 3.15
+  Person.findByIdAndDelete(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 // 3.5 Generate unique ID
