@@ -69,16 +69,25 @@ const App = () => {
       personService
         .create(personObject)
         .then(response => {
-        setPersons(persons.concat(response.data));
+          setPersons(persons.concat(response.data));
 
-        // show notification
-        setNotification(`Added ${newName} to phonebook`)
-        setNotificationType('notification')
+          // show notification
+          setNotification(`Added ${newName} to phonebook`)
+          setNotificationType('notification')
 
-        setTimeout(() => {
-          setNotification(null)
-        }, 3000)
-      })
+          setTimeout(() => {
+            setNotification(null)
+          }, 3000)
+        })
+        .catch(error => {
+          console.log(error.response.data)
+          setNotification((error.response.data.error))
+          setNotificationType('error')
+
+          setTimeout(() => {
+            setNotification(null)
+          }, 3000)
+        })
     }
 
     setNewName('')
